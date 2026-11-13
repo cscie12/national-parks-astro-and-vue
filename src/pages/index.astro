@@ -1,0 +1,72 @@
+---
+// Everything between the --- fences is the "frontmatter": JavaScript that runs
+// on the server at BUILD time (or in `npm run dev`), never in the browser.
+// Files in src/pages/ become routes: this file is "/", islands.astro is "/islands".
+import Layout from '../layouts/Layout.astro';
+import ParksNearMe from '../components/ParksNearMe.vue';
+import { getNationalParks } from '../lib/nps.js';
+
+// Build time: fetch from the NPS API with our SECRET key.
+// Top-level `await` is allowed in frontmatter; no async function wrapper needed.
+const parks = await getNationalParks();
+
+// Props given to an island are serialized into the HTML page.
+// So only send the few fields the component actually needs (not the full park records!).
+const parkList = parks.map(({ parkCode, fullName, url, states, latitude, longitude }) => ({
+  parkCode,
+  fullName, 
+  url,
+  states,
+  latitude,
+  longitude,
+}));
+---
+<Layout title="National Parks">
+  <h1>National Parks</h1>
+
+  <section>
+    <h2>Closest to you</h2>
+    <!--
+      A Vue component inside an Astro page.
+      client:load = render it to HTML at build time AND make it interactive in the browser.
+      The parks list comes from Astro; the browser never talks to the NPS API (or sees the key).
+    -->
+    <ParksNearMe client:load parks={parkList} />
+  </section>
+
+  <section>
+    <h2>All Parks</h2>
+    <!-- Plain Astro (JSX-style) templating: runs once at build, ships zero JS.
+         Here we can use the FULL `parks` records (e.g. park.name), because they
+         are only used to produce HTML; they are never sent to the browser as data. -->
+    <ul class="all-parks">
+      {
+        parks.map((park) => (
+          <li>
+            <a href={park.url}>{park.name}</a>
+            {/* The API sends "CT,GA,MA"; adding a space after each comma lets long lists wrap */}
+            <span class="states">{park.states.replaceAll(',', ', ')}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Layout>
+
+<style>
+  /* Astro <style> tags are SCOPED by default: these rules only affect this
+     page's markup, not the Vue component or other pages. */
+  .all-parks {
+    columns: 16rem;
+    padding-left: 1.25rem;
+  }
+  .all-parks li {
+    break-inside: avoid;
+    margin-bottom: 0.25rem;
+  }
+  .states {
+    color: var(--muted);
+    font-size: 0.85em;
+    margin-left: 0.35rem;
+  }
+</style>

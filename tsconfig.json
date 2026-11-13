@@ -1,0 +1,10 @@
+{
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    // This project is plain JavaScript (untyped NPS API data), so don't
+    // demand type annotations. Newer TypeScript turns this on by default.
+    "noImplicitAny": false
+  },
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"]
+}

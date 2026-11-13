@@ -1,0 +1,60 @@
+/* Global styles, imported once in Layout.astro so they apply to every page.
+   Colors are CSS custom properties ("variables"): define them once here,
+   use them anywhere with var(--name), including inside Vue components. */
+:root {
+  --bg: #f5f3ee;
+  --card: #ffffff;
+  --text: #1f2a24;
+  --muted: #5f6b64;
+  --border: #d8d3c7;
+  --accent: #2f6b3f;
+  --error: #b3261e;
+  color-scheme: light dark;
+}
+/* Dark mode: just redefine the variables; every rule using them updates automatically. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141815;
+    --card: #1d231f;
+    --text: #e6ebe7;
+    --muted: #9aa69e;
+    --border: #333b35;
+    --accent: #7cc68f;
+    --error: #ff8a80;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  background: var(--bg);
+  color: var(--text);
+}
+a { color: var(--accent); }
+button {
+  font: inherit;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  cursor: pointer;
+}
+button.secondary { background: transparent; color: var(--accent); }
+button:disabled { opacity: 0.6; cursor: wait; }
+input[type='text'] { border: 1px solid var(--border); border-radius: 6px; background: var(--card); color: var(--text); }
+.container { max-width: 75rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--accent);
+}
+.site-header a { color: var(--bg); text-decoration: none; }
+.site-header .brand { font-weight: 700; font-size: 1.1rem; }
+.site-header nav { display: flex; gap: 1rem; }
+.site-footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 2rem 1rem; }

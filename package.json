@@ -1,0 +1,20 @@
+{
+  "name": "astro-nps-vue",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/vue": "^7.1.4",
+    "astro": "^7.4.10",
+    "vue": "^3.5.45"
+  },
+  "allowScripts": {
+    "fsevents@2.3.3": true
+  }
+}

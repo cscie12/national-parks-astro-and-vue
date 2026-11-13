@@ -1,0 +1,38 @@
+---
+// A LAYOUT is just a component that wraps pages with the shared HTML shell
+// (<head>, header, footer). Every page uses it, so nothing is repeated.
+
+// Importing CSS here makes it global: it applies to every page that uses this layout.
+import '../styles/global.css';
+
+// Describes the props this component accepts: <Layout title="...">
+interface Props {
+  title: string;
+}
+// Astro.props holds whatever attributes the page passed in.
+const { title } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | NPS Explorer</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/" class="brand">National Parks</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/islands">Islands demo</a>
+      </nav>
+    </header>
+    <main class="container">
+      {/* <slot /> is replaced by whatever the page puts between <Layout>...</Layout> */}
+      <slot />
+    </main>
+    <footer class="site-footer">
+      CSCI E-12 · Astro + Vue demo · Park data: NPS API
+    </footer>
+  </body>
+</html>

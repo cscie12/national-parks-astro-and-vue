@@ -1,0 +1,51 @@
+---
+// An "island" is an interactive component floating in a page of static HTML.
+// By default Astro sends ZERO JavaScript for a framework component; a client:*
+// directive opts it in and decides WHEN its JS loads and "hydrates" it.
+import Layout from '../layouts/Layout.astro';
+import Counter from '../components/Counter.vue';
+---
+
+<Layout title="Islands demo">
+  <h1>Client directives</h1>
+  <p>
+    The same Vue component, used five ways. Open DevTools → Network (filter: JS) and watch
+    when each one loads. Then try <strong>View Source</strong>.
+  </p>
+
+  <h2>No directive</h2>
+  <p>Rendered to HTML at build time. No JavaScript is sent, so the button does nothing.</p>
+  <Counter label="(none)" />
+
+  <h2>client:load</h2>
+  <p>HTML at build time + hydrated as soon as the page loads. Use it for things needed right away.</p>
+  <Counter client:load label="client:load" />
+
+  <h2>client:idle</h2>
+  <p>Hydrated once the browser is idle. Use it for lower-priority widgets.</p>
+  <Counter client:idle label="client:idle" />
+
+  <h2>client:only="vue"</h2>
+  <p>
+    <em>Not</em> rendered at build time; it only exists in the browser. Use it for components
+    that need browser-only things (like <code>window</code> or <code>navigator</code>) while rendering.
+  </p>
+  <Counter client:only="vue" label='client:only="vue"'>
+    {/* slot="fallback" is shown in place of the component until its JS arrives */}
+    <p slot="fallback">Loading…</p>
+  </Counter>
+
+  <h2>client:visible</h2>
+  <p>Hydrated only when scrolled into view. Scroll down…</p>
+  <div class="spacer">↓ keep scrolling ↓</div>
+  <Counter client:visible label="client:visible" />
+</Layout>
+
+<style>
+  .spacer {
+    height: 120vh;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+  }
+</style>
